@@ -1,0 +1,93 @@
+//Bellman-Ford (Shortest path from one node to all nodes, negative edges are allowed)
+#include <iostream>
+#include <vector>
+
+using namespace std;
+
+#define MAX 5000
+#define INF 999999
+
+int num_Node, num_Edge, starting_Node;
+int shortest_Path[MAX] = {};
+int start[MAX] = {}, end[MAX] = {}, edge_Weight[MAX] = {}; 
+
+
+int main(void)
+{
+	cout << "How many Nodes / Vertices are there in the graph? "; 
+	cin >> num_Node;
+	cout << endl;
+	cout << "How many Edges are there in the graph? ";
+	cin >> num_Edge;
+	cout << endl;
+	cout << "Which node is the starting node? ";
+	cin >> starting_Node;
+	cout << endl;
+	
+	for(int i = 1; i <= num_Node; i++)
+	{
+		if(i == starting_Node)
+		{
+			shortest_Path[i] = 0;
+	    }else
+		{
+			shortest_Path[i] = INF;
+		}
+	}
+	
+	cout << "Each edge connects from Node x to Node y with a distance of z." << endl; 
+	cout << "Please input x, y, z of each edge in the correct order." << endl;
+	for(int i = 1; i <= num_Edge; i++)
+	{
+		int x, y, dist;
+		cout << "The x, y, z of Edge " << i << " is ";
+		cin >> start[i] >> end[i] >> edge_Weight[i];
+		cout << "." << endl;
+	}
+	
+	//Main Point : Relaxation
+	for(int relax = 1; relax <= num_Edge; relax++) //Relax the all edges n times
+	{
+		for(int index = 1; index <= num_Edge; index++)
+		{
+			if(shortest_Path[end[index]] > shortest_Path[start[index]] + edge_Weight[index])
+			{
+				shortest_Path[end[index]] = shortest_Path[start[index]] + edge_Weight[index];
+			}
+		}
+	}
+	
+	for(int i = 1; i <= num_Node; i++)
+	{
+		if(shortest_Path[i] == INF)
+		{
+			cout << "Node " << starting_Node << " is not connected to Node " << i << "." << endl;
+		}else
+		{
+			cout << "The shortest path from Node " << starting_Node << " to Node " << i << " is " << shortest_Path[i] << " units." << endl;
+		}
+	}
+	return 0;
+}
+
+/**
+test case 1:
+
+INPUT:
+5
+5
+1
+2 3 2
+1 2 -3
+1 5 5
+4 5 2
+3 4 3
+
+OUTPUT:
+0
+-3
+-1
+2
+4
+
+**/
